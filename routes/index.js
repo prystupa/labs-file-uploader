@@ -15,11 +15,20 @@ function sleep(count) {
 
 exports.upload = function(req, res){
 
-	req.on('data', function(){
-		sleep(200000000);
-	});
+	if(req.readable) {
 
-	req.on('end', function(){
-		res.json({"success": true});
-	});
+		req.on('data', function(){
+			sleep(200000000);
+		});
+
+		req.on('end', function(){
+			res.json({"success": true});
+		});
+	}
+	else {
+
+		res.writeHead(200, {"Content-Type": "text/html"});
+		res.write("{success: true}");
+		res.end();
+	}
 };
